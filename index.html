@@ -14,7 +14,6 @@
         background: #003366; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
       
-      /* Background Image Styling */
       .bg-container {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: url('bg.jpeg') no-repeat center center fixed; 
@@ -22,10 +21,9 @@
         z-index: 1;
       }
 
-      /* Darkened Overlay to ensure text readability */
       .overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 51, 102, 0.8); /* SDO Blue with 80% transparency */
+        background: rgba(0, 51, 102, 0.8); 
         color: white;
         display: flex; flex-direction: column; 
         align-items: center; justify-content: center;
@@ -53,7 +51,6 @@
         box-shadow: 0 10px 20px rgba(0,0,0,0.3);
       }
 
-      /* Loader Spinner */
       .loader { display: none; }
       .spinner {
         border: 6px solid rgba(255, 255, 255, 0.3);
@@ -64,8 +61,6 @@
         margin-bottom: 20px;
       }
       @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-      iframe { width: 100%; height: 100%; border: none; display: none; position: relative; z-index: 10000; }
     </style>
   </head>
   <body>
@@ -74,7 +69,8 @@
 
     <div id="splash-screen" class="overlay">
       <div style="padding: 20px;">
-        <img src="time.png" alt="Logo" style="width: 120px; margin-bottom: 20px;"> <h1>SDO Biñan City</h1>
+        <img src="time.png" alt="Logo" style="width: 120px; margin-bottom: 20px;"> 
+        <h1>SDO Biñan City</h1>
         <p>🛡️ PROJECT PROTECT</p>
         <div class="btn-container">
           <button onclick="launchApp('kiosk')">Student Helper</button>
@@ -88,37 +84,30 @@
       <h2 style="color: #ffcc00;">Accessing Secure Server...</h2>
     </div>
 
-    <iframe id="appFrame" title="Project Protect System"></iframe>
-
     <script>
       function launchApp(mode) {
-        // Your specific Google Script Web App URL
+        // Updated Web App URL
         const baseUrl = "https://script.google.com/macros/s/AKfycbzOlyFVWdj8AZzIrrzjTCvQM5uSa3PeOdu2U0dIGVFDBUygZKqsclQCEQOdx7dbDV8hUw/exec";
-        const frame = document.getElementById("appFrame");
+        
         const splash = document.getElementById("splash-screen");
         const loader = document.getElementById("loader");
         
-        // 1. Set Source
-        frame.src = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
-        
-        // 2. Hide Splash, Show Loader
+        // 1. Show the loader
         splash.style.opacity = '0';
         setTimeout(() => { 
             splash.style.display = 'none'; 
             loader.style.display = 'flex'; 
         }, 500);
-        
-        // 3. When Iframe finishes loading, hide loader
-        frame.onload = function() {
-            loader.style.display = 'none';
-            frame.style.display = 'block'; 
-        };
-        
-        // 4. Request Fullscreen for immersive experience
+
+        // 2. Fullscreen attempt (optional, some browsers block it before redirect)
         const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen().catch((err) => console.warn("Fullscreen blocked or not supported"));
-        }
+        if (elem.requestFullscreen) { elem.requestFullscreen().catch(() => {}); }
+
+        // 3. Redirect to Google Apps Script
+        setTimeout(() => {
+          const finalUrl = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
+          window.location.href = finalUrl;
+        }, 1200);
       }
     </script>
   </body>
