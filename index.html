@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDO Biñan City | Project Protect Launcher</title>
+    <title>SDO Biñan City Project Protect</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="safety.png" type="image/png">
     <link rel="apple-touch-icon" href="safety.png">
@@ -11,67 +11,51 @@
     <style>
       body, html { 
         margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
-        background: #003366; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #003366; font-family: sans-serif;
       }
       
-      .bg-container {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: url('bg.jpeg') no-repeat center center fixed; 
-        background-size: cover;
-        z-index: 1;
-      }
-
+      /* Common Fullscreen Overlay Style */
       .overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 51, 102, 0.8); 
+        background: #003366; 
         color: white;
         display: flex; flex-direction: column; 
         align-items: center; justify-content: center;
         z-index: 9999;
         transition: opacity 0.5s ease;
-        text-align: center;
       }
 
-      h1 { font-size: 3rem; margin-bottom: 0; text-transform: uppercase; letter-spacing: 2px; }
-      p { font-size: 1.5rem; color: #ffcc00; margin-top: 5px; font-weight: bold; }
-
-      .btn-container { margin-top: 40px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+      .btn-container { margin-top: 20px; display: flex; gap: 20px; }
       
       button {
-        padding: 18px 40px; font-size: 1.1rem; cursor: pointer;
-        border: 2px solid #ffcc00; background: transparent; color: #ffcc00;
-        border-radius: 50px; font-weight: bold;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
+        padding: 15px 30px; font-size: 18px; cursor: pointer;
+        border: 2px solid white; background: transparent; color: white;
+        border-radius: 8px; font-weight: bold;
       }
+      button:hover { background: white; color: #003366; }
 
-      button:hover { 
-        background: #ffcc00; color: #003366; 
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-      }
-
+      /* Loader Spinner */
       .loader { display: none; }
       .spinner {
-        border: 6px solid rgba(255, 255, 255, 0.3);
-        border-top: 6px solid #ffcc00;
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #ffcc00; /* SDO Gold Accent */
         border-radius: 50%;
-        width: 60px; height: 60px;
+        width: 50px;
+        height: 50px;
         animation: spin 1s linear infinite;
         margin-bottom: 20px;
       }
       @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+      iframe { width: 100%; height: 100%; border: none; display: none; }
     </style>
   </head>
   <body>
 
-    <div class="bg-container"></div>
-
     <div id="splash-screen" class="overlay">
-      <div style="padding: 20px;">
-        <img src="time.png" alt="Logo" style="width: 120px; margin-bottom: 20px;"> 
+      <div style="text-align: center;">
         <h1>SDO Biñan City</h1>
-        <p>🛡️ PROJECT PROTECT</p>
+        <p>Project Protect</p>
         <div class="btn-container">
           <button onclick="launchApp('kiosk')">Student Helper</button>
           <button onclick="launchApp('admin')">Admin Dashboard</button>
@@ -81,40 +65,40 @@
 
     <div id="loader" class="loader overlay">
       <div class="spinner"></div>
-      <h2 style="color: #ffcc00;">Accessing Secure Server...</h2>
+      <h2>Loading...</h2>
     </div>
 
+    <iframe id="appFrame" title="Attendance System"></iframe>
+
     <script>
-     <script>
-  function launchApp(mode) {
-    // Project Protect Web App URL
-    const baseUrl = "https://script.google.com/macros/s/AKfycbzOlyFVWdj8AZzIrrzjTCvQM5uSa3PeOdu2U0dIGVFDBUygZKqsclQCEQOdx7dbDV8hUw/exec";
-    const frame = document.getElementById("appFrame");
-    const splash = document.getElementById("splash-screen");
-    const loader = document.getElementById("loader");
-    
-    // 1. Trigger Fullscreen on the GitHub page itself
-    const elem = document.documentElement;
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen().catch((err) => console.warn("Fullscreen blocked"));
-    }
-    
-    // 2. Load the App inside the frame
-    frame.src = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
-    
-    // 3. UI Transitions
-    splash.style.opacity = '0';
-    setTimeout(() => { 
-        splash.style.display = 'none'; 
-        loader.style.display = 'flex'; 
-    }, 500);
-    
-    frame.onload = function() {
-        loader.style.display = 'none';
-        frame.style.display = 'block'; 
-    };
-  }
-</script>
+      function launchApp(mode) {
+        const baseUrl = "https://script.google.com/macros/s/AKfycbzOlyFVWdj8AZzIrrzjTCvQM5uSa3PeOdu2U0dIGVFDBUygZKqsclQCEQOdx7dbDV8hUw/exec";
+        const frame = document.getElementById("appFrame");
+        const splash = document.getElementById("splash-screen");
+        const loader = document.getElementById("loader");
+        
+        // 1. Set Source
+        frame.src = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
+        
+        // 2. Hide Splash, Show Loader
+        splash.style.opacity = '0';
+        setTimeout(() => { 
+            splash.style.display = 'none'; 
+            loader.style.display = 'flex'; // Show loading screen
+        }, 500);
+        
+        // 3. When Iframe finishes loading, hide loader
+        frame.onload = function() {
+            loader.style.display = 'none';
+            frame.style.display = 'block'; // Show the actual app
+        };
+        
+        // 4. Request Fullscreen
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen().catch((err) => console.warn(err.message));
+        }
+      }
     </script>
   </body>
 </html>
