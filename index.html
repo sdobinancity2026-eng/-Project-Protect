@@ -85,30 +85,36 @@
     </div>
 
     <script>
-      function launchApp(mode) {
-        // Updated Web App URL
-        const baseUrl = "https://script.google.com/macros/s/AKfycbzOlyFVWdj8AZzIrrzjTCvQM5uSa3PeOdu2U0dIGVFDBUygZKqsclQCEQOdx7dbDV8hUw/exec";
-        
-        const splash = document.getElementById("splash-screen");
-        const loader = document.getElementById("loader");
-        
-        // 1. Show the loader
-        splash.style.opacity = '0';
-        setTimeout(() => { 
-            splash.style.display = 'none'; 
-            loader.style.display = 'flex'; 
-        }, 500);
-
-        // 2. Fullscreen attempt (optional, some browsers block it before redirect)
-        const elem = document.documentElement;
-        if (elem.requestFullscreen) { elem.requestFullscreen().catch(() => {}); }
-
-        // 3. Redirect to Google Apps Script
-        setTimeout(() => {
-          const finalUrl = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
-          window.location.href = finalUrl;
-        }, 1200);
-      }
+     <script>
+  function launchApp(mode) {
+    // Project Protect Web App URL
+    const baseUrl = "https://script.google.com/macros/s/AKfycbzOlyFVWdj8AZzIrrzjTCvQM5uSa3PeOdu2U0dIGVFDBUygZKqsclQCEQOdx7dbDV8hUw/exec";
+    const frame = document.getElementById("appFrame");
+    const splash = document.getElementById("splash-screen");
+    const loader = document.getElementById("loader");
+    
+    // 1. Trigger Fullscreen on the GitHub page itself
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen().catch((err) => console.warn("Fullscreen blocked"));
+    }
+    
+    // 2. Load the App inside the frame
+    frame.src = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
+    
+    // 3. UI Transitions
+    splash.style.opacity = '0';
+    setTimeout(() => { 
+        splash.style.display = 'none'; 
+        loader.style.display = 'flex'; 
+    }, 500);
+    
+    frame.onload = function() {
+        loader.style.display = 'none';
+        frame.style.display = 'block'; 
+    };
+  }
+</script>
     </script>
   </body>
 </html>
