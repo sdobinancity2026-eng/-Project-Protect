@@ -11,13 +11,16 @@
     <style>
       body, html { 
         margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
-        background: #003366; font-family: sans-serif;
+        background: url('pro.png') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
       
-      /* Common Fullscreen Overlay Style */
       .overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: #003366; 
+        background: linear-gradient(rgba(0, 51, 102, 0.75), rgba(0, 51, 102, 0.75)), url('pro.png');
+        background-size: cover;
+        background-position: center;
         color: white;
         display: flex; flex-direction: column; 
         align-items: center; justify-content: center;
@@ -25,39 +28,71 @@
         transition: opacity 0.5s ease;
       }
 
-      .btn-container { margin-top: 20px; display: flex; gap: 20px; }
+      .header-content {
+        text-align: center;
+      }
+
+      /* SDO Biñan City - Smaller */
+      .header-content h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        font-weight: 400;
+        opacity: 0.9;
+      }
+
+      /* PROJECT PROTECT - Much Bigger */
+      .header-content p {
+        font-size: 3.5rem; /* Increased size significantly */
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #ffcc00; /* SDO Gold Accent */
+        font-weight: 900;
+        margin-top: -5px; /* Pulls it closer to the line above */
+        margin-bottom: 40px;
+        text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
+      }
+
+      .btn-container { display: flex; gap: 20px; justify-content: center; }
       
       button {
-        padding: 15px 30px; font-size: 18px; cursor: pointer;
-        border: 2px solid white; background: transparent; color: white;
-        border-radius: 8px; font-weight: bold;
+        padding: 15px 35px; font-size: 18px; cursor: pointer;
+        border: 2px solid #ffcc00; background: rgba(255, 255, 255, 0.1); color: white;
+        border-radius: 50px; font-weight: bold;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
       }
-      button:hover { background: white; color: #003366; }
+      
+      button:hover { 
+        background: #ffcc00; 
+        color: #003366; 
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 204, 0, 0.4);
+      }
 
-      /* Loader Spinner */
       .loader { display: none; }
       .spinner {
-        border: 8px solid #f3f3f3;
-        border-top: 8px solid #ffcc00; /* SDO Gold Accent */
+        border: 8px solid rgba(255, 255, 255, 0.3);
+        border-top: 8px solid #ffcc00;
         border-radius: 50%;
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
         animation: spin 1s linear infinite;
         margin-bottom: 20px;
       }
       @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-      iframe { width: 100%; height: 100%; border: none; display: none; }
+      iframe { width: 100%; height: 100%; border: none; display: none; background: white; }
     </style>
   </head>
   <body>
 
     <div id="splash-screen" class="overlay">
-      <div style="text-align: center;">
+      <div class="header-content">
         <h1>SDO Biñan City</h1>
         <p>Project Protect</p>
         <div class="btn-container">
-          <button onclick="launchApp('kiosk')">Student</button>
+          <button onclick="launchApp('kiosk')">Student Portal</button>
           <button onclick="launchApp('admin')">Admin Dashboard</button>
         </div>
       </div>
@@ -65,10 +100,10 @@
 
     <div id="loader" class="loader overlay">
       <div class="spinner"></div>
-      <h2>Loading...</h2>
+      <h2 style="color: #ffcc00; letter-spacing: 3px;">INITIALIZING...</h2>
     </div>
 
-    <iframe id="appFrame" title="Attendance System"></iframe>
+    <iframe id="appFrame" title="Project Protect System"></iframe>
 
     <script>
       function launchApp(mode) {
@@ -77,23 +112,19 @@
         const splash = document.getElementById("splash-screen");
         const loader = document.getElementById("loader");
         
-        // 1. Set Source
         frame.src = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
         
-        // 2. Hide Splash, Show Loader
         splash.style.opacity = '0';
         setTimeout(() => { 
             splash.style.display = 'none'; 
-            loader.style.display = 'flex'; // Show loading screen
+            loader.style.display = 'flex'; 
         }, 500);
         
-        // 3. When Iframe finishes loading, hide loader
         frame.onload = function() {
             loader.style.display = 'none';
-            frame.style.display = 'block'; // Show the actual app
+            frame.style.display = 'block'; 
         };
         
-        // 4. Request Fullscreen
         const elem = document.documentElement;
         if (elem.requestFullscreen) {
           elem.requestFullscreen().catch((err) => console.warn(err.message));
