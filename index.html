@@ -1,22 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-        <title>SDO Biñan City Project Protect</title>
-      </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDO Biñan City Project Protect</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="safe.png" type="image/png">
+    <link rel="apple-touch-icon" href="safe.png">
+
+    <style>
+      body, html { 
+        margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
+        background: #003366; font-family: sans-serif;
+      }
+      
+      /* Common Fullscreen Overlay Style */
+      .overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: #003366; 
+        color: white;
+        display: flex; flex-direction: column; 
+        align-items: center; justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+
+      .btn-container { margin-top: 20px; display: flex; gap: 20px; }
+      
+      button {
+        padding: 15px 30px; font-size: 18px; cursor: pointer;
+        border: 2px solid white; background: transparent; color: white;
+        border-radius: 8px; font-weight: bold;
+      }
+      button:hover { background: white; color: #003366; }
+
+      /* Loader Spinner */
+      .loader { display: none; }
+      .spinner {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #ffcc00; /* SDO Gold Accent */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+      iframe { width: 100%; height: 100%; border: none; display: none; }
+    </style>
+  </head>
   <body>
 
-  <iframe src="https://script.google.com/macros/s/AKfycbztHoEkeEflDEyTuCYqwq1VvknJEWO_t1-Y4KUIwMYCl2t47AcjxTksXrH4_ACjDCVAqQ/exec"
-	width="100%"
-	height="100%"
-	allowfullscreen="true"
-style="position: fixed; top: 0, left: 0; width: 100%; height:100%; border: none;"></iframe>
+    <div id="splash-screen" class="overlay">
+      <div style="text-align: center;">
+        <h1>SDO Biñan City</h1>
+        <p>Project Protect</p>
+        <div class="btn-container">
+          <button onclick="launchApp('kiosk')">Student</button>
+          <button onclick="launchApp('admin')">Admin Dashboard</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="loader" class="loader overlay">
+      <div class="spinner"></div>
+      <h2>Loading...</h2>
+    </div>
+
+    <iframe id="appFrame" title="Attendance System"></iframe>
 
     <script>
-      window.onload=function(){
-	documens.querySelector('iframe').requestFullscreen(0.cath((err) => {
-	console.error('Error attempting to enable full-screen mod: {err.message}');
-});
-};
+      function launchApp(mode) {
+        const baseUrl = "https://script.google.com/macros/s/AKfycbztHoEkeEflDEyTuCYqwq1VvknJEWO_t1-Y4KUIwMYCl2t47AcjxTksXrH4_ACjDCVAqQ/exec";
+        const frame = document.getElementById("appFrame");
+        const splash = document.getElementById("splash-screen");
+        const loader = document.getElementById("loader");
+        
+        // 1. Set Source
+        frame.src = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
+        
+        // 2. Hide Splash, Show Loader
+        splash.style.opacity = '0';
+        setTimeout(() => { 
+            splash.style.display = 'none'; 
+            loader.style.display = 'flex'; // Show loading screen
+        }, 500);
+        
+        // 3. When Iframe finishes loading, hide loader
+        frame.onload = function() {
+            loader.style.display = 'none';
+            frame.style.display = 'block'; // Show the actual app
+        };
+        
+        // 4. Request Fullscreen
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen().catch((err) => console.warn(err.message));
+        }
+      }
     </script>
   </body>
 </html>
