@@ -1,113 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDO Biñan City Project Protect</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="safety.png" type="image/png">
-    <link rel="apple-touch-icon" href="safety.png">
-
-    <style>
-      body, html { 
-        margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
-        background: #003366; font-family: sans-serif;
-      }
-      
-      /* Fullscreen Overlay with Background Image */
-      .overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url('bg.jpg');
-        background-size: cover;
-        background-position: center;
-        color: white;
-        display: flex; flex-direction: column; 
-        align-items: center; justify-content: center;
-        z-index: 9999;
-        transition: opacity 0.5s ease;
-      }
-
-      /* Text Shadow for better visibility over bg image */
-      h1, p { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
-      .btn-container { margin-top: 20px; display: flex; gap: 20px; }
-      
-      button {
-        padding: 15px 30px; font-size: 18px; cursor: pointer;
-        border: 2px solid white; background: rgba(255, 255, 255, 0.1); color: white;
-        border-radius: 8px; font-weight: bold;
-        backdrop-filter: blur(5px); /* Adds a modern frosted glass effect */
-        transition: 0.3s;
-      }
-      button:hover { background: white; color: #003366; }
-
-      .loader { display: none; }
-      .spinner {
-        border: 8px solid rgba(243, 243, 243, 0.3);
-        border-top: 8px solid #ffcc00; 
-        border-radius: 50%;
-        width: 50px; height: 50px;
-        animation: spin 1s linear infinite;
-        margin-bottom: 20px;
-      }
-      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-      iframe { width: 100%; height: 100%; border: none; display: none; }
-    </style>
-  </head>
+        <title>SDO Biñan City Project Protect</title>
+      </head>
   <body>
 
-    <div id="splash-screen" class="overlay">
-      <div style="text-align: center;">
-        <img src="safety.png" alt="Logo" style="width: 100px; margin-bottom: 10px;">
-        <h1>SDO Biñan City</h1>
-        <p>Project Protect</p>
-        <div class="btn-container">
-          <button onclick="launchApp('kiosk')">Student Helper</button>
-          <button onclick="launchApp('admin')">Admin Dashboard</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="loader" class="loader overlay">
-      <div class="spinner"></div>
-      <h2>Loading Secure Session...</h2>
-    </div>
-
-    <iframe id="appFrame" title="Project Protect System"></iframe>
+  <iframe src="https://script.google.com/macros/s/AKfycbzOlyFVWdj8AZzIrrzjTCvQM5uSa3PeOdu2U0dIGVFDBUygZKqsclQCEQOdx7dbDV8hUw/exec"
+	width="100%"
+	height="100%"
+	allowfullscreen="true"
+style="position: fixed; top: 0, left: 0; width: 100%; height:100%; border: none;"></iframe>
 
     <script>
-      function launchApp(mode) {
-        const baseUrl = "https://script.google.com/macros/s/AKfycbzOlyFVWdj8AZzIrrzjTCvQM5uSa3PeOdu2U0dIGVFDBUygZKqsclQCEQOdx7dbDV8hUw/exec";
-        const frame = document.getElementById("appFrame");
-        const splash = document.getElementById("splash-screen");
-        const loader = document.getElementById("loader");
-        
-        let finalUrl = (mode === 'admin') ? baseUrl + "?page=admin" : baseUrl;
-        
-        // Force the /u/0/ path to avoid the "Paumanhin" account conflict error
-        if (mode === 'admin') {
-          finalUrl = finalUrl.replace("/macros/s/", "/macros/u/0/s/");
-        }
-
-        frame.src = finalUrl;
-        
-        splash.style.opacity = '0';
-        setTimeout(() => { 
-            splash.style.display = 'none'; 
-            loader.style.display = 'flex'; 
-        }, 500);
-        
-        frame.onload = function() {
-            loader.style.display = 'none';
-            frame.style.display = 'block'; 
-        };
-        
-        const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen().catch((err) => console.warn("Fullscreen request ignored."));
-        }
-      }
+      window.onload=function(){
+	documens.querySelector('iframe').requestFullscreen(0.cath((err) => {
+	console.error('Error attempting to enable full-screen mod: {err.message}');
+});
+};
     </script>
   </body>
 </html>
